@@ -1,151 +1,1158 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="PkLa_ViOo6FAHpvh8SacceMb95o9tePRdrqLNBz9X1M" />
+<meta name="robots" content="index, follow">
 
-    <!-- 🔐 Google Site Verification -->
-    <meta name="google-site-verification" content="PkLa_ViOo6FAHpvh8SacceMb95o9tePRdrqLNBz9X1M" />
+<title>AWS S3 Calculator – Free Amazon S3 Pricing &amp; Cost Calculator</title>
 
-    <!-- SEO Potenciado -->
-    <title>AWS S3 Tools – Cost Calculator, Storage Optimization & Policy Generators</title>
+<meta name="description" content="Free AWS S3 calculator. Estimate monthly Amazon S3 costs by storage class, requests (GET/PUT/LIST), data transfer, and replication. Covers Standard, Intelligent-Tiering, Standard-IA, One Zone-IA, Glacier. No login required.">
 
-    <meta name="description" content="Optimize AWS S3 storage with tools to calculate costs, analyze object size, manage policies, and choose storage classes. Reduce storage expenses and improve performance.">
+<meta name="keywords" content="aws calculator s3, aws s3 calculator, calculator s3 aws, aws s3 cost calculator, s3 pricing calculator, amazon s3 pricing calculator, aws s3 pricing calculator, s3 calculator, s3 cost calculator, s3 price calculator, aws s3 cost estimator, aws storage calculator, aws storage pricing calculator, s3 storage calculator, amazon s3 cost calculator, s3 storage cost calculator">
 
-    <meta name="keywords" content="
-    aws s3 cost calculator,
-    s3 pricing calculator,
-    s3 storage estimator,
-    s3 transfer cost calculator,
-    s3 request cost estimator,
-    s3 storage class selector,
-    s3 lifecycle policy generator,
-    s3 bucket policy generator,
-    s3 public access checker,
-    s3 cost optimizer,
-    aws storage cost calculator,
-    s3 object size analyzer,
-    optimize s3 costs aws,
-    aws storage pricing estimator
-    ">
+<link rel="canonical" href="https://franrivalbigprojects.github.io/aws-s3-tools/">
 
-    <meta name="author" content="AI Tools Suite">
+<meta property="og:title" content="AWS S3 Calculator – Amazon S3 Pricing and Cost Estimator">
+<meta property="og:description" content="Calculate Amazon S3 monthly costs by storage class, requests, data transfer, and replication. Free, no login.">
+<meta property="og:type" content="website">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="AWS S3 Tools – Storage Cost & Optimization Suite">
-    <meta property="og:description" content="Estimate S3 costs, optimize storage, and manage policies efficiently.">
-    <meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Estilos -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #0f172a;
-            color: #e2e8f0;
-        }
-        h1 {
-            color: #38bdf8;
-        }
-        p {
-            max-width: 900px;
-            line-height: 1.6;
-        }
-        .tools {
-            margin-top: 30px;
-        }
-        .tool {
-            margin-bottom: 16px;
-            padding: 15px;
-            background: #1e293b;
-            border-radius: 10px;
-            transition: 0.2s;
-        }
-        .tool:hover {
-            background: #334155;
-        }
-        a {
-            text-decoration: none;
-            color: #22c55e;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        small {
-            display: block;
-            margin-top: 5px;
-            color: #94a3b8;
-        }
-    </style>
+<style>
+:root {
+  --bg: #04080f;
+  --surface: #07101a;
+  --surface2: #0b1622;
+  --border: #0f1e30;
+  --border2: #162d44;
+  --s3: #569a31;
+  --s3-dim: rgba(86,154,49,0.1);
+  --s3-dim2: rgba(86,154,49,0.05);
+  --aws: #ff9900;
+  --aws-dim: rgba(255,153,0,0.08);
+  --aws-dim2: rgba(255,153,0,0.04);
+  --blue: #38bdf8;
+  --blue-dim: rgba(56,189,248,0.08);
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.1);
+  --green-dim2: rgba(34,197,94,0.05);
+  --orange: #f97316;
+  --orange-dim: rgba(249,115,22,0.08);
+  --yellow: #fbbf24;
+  --yellow-dim: rgba(251,191,36,0.08);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.08);
+  --text: #b8cce0;
+  --text-muted: #3a5570;
+  --text-dim: #0f1e30;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+  --r: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+header {
+  border-bottom: 1px solid var(--border2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(4,8,15,0.96);
+  backdrop-filter: blur(12px);
+}
+
+.header-inner {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.logo-pill {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--s3);
+  background: var(--s3-dim2);
+  border: 1px solid rgba(86,154,49,0.3);
+  border-radius: 3px;
+  padding: 3px 9px;
+}
+
+.logo-text {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.logo-text strong { color: var(--s3); font-weight: 500; }
+
+.wrapper {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* HERO */
+.hero {
+  padding: 48px 0 34px;
+  border-bottom: 1px solid var(--border2);
+  margin-bottom: 28px;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--s3);
+  margin-bottom: 14px;
+  opacity: 0.8;
+}
+
+h1 {
+  font-size: clamp(22px, 3.2vw, 30px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h1 em { font-style: normal; color: var(--s3); }
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.75;
+  margin-bottom: 18px;
+}
+
+.hero-sub strong { color: var(--text); }
+
+.pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 3px;
+  border: 1px solid;
+}
+
+.pill-s3  { color: var(--s3);  background: var(--s3-dim2);  border-color: rgba(86,154,49,0.3); }
+.pill-aws { color: var(--aws); background: var(--aws-dim2); border-color: rgba(255,153,0,0.3); }
+.pill-dim { color: var(--text-muted); border-color: var(--border2); }
+
+/* TOOL */
+.tool-shell {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.tool-topbar {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border2);
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.topbar-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.btn-sm {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid;
+  transition: opacity 0.15s;
+}
+
+.btn-sm:hover { opacity: 0.75; }
+.btn-s3    { background: var(--s3-dim2); color: var(--s3); border-color: rgba(86,154,49,0.3); }
+.btn-ghost { background: transparent; color: var(--text-muted); border-color: var(--border2); }
+.btn-green { background: var(--green-dim2); color: var(--green); border-color: rgba(34,197,94,0.25); }
+
+/* TABS */
+.calc-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border2);
+  background: var(--surface2);
+}
+
+.ctab {
+  padding: 9px 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s;
+  letter-spacing: 0.02em;
+}
+
+.ctab.active { color: var(--s3); border-bottom-color: var(--s3); }
+.ctab:hover:not(.active) { color: var(--text); }
+
+.ctpanel { display: none; padding: 20px; }
+.ctpanel.active { display: block; }
+
+/* FORM */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+
+.field-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.field-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  margin-top: -2px;
+}
+
+.s3-input, .s3-select {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 9px 11px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  width: 100%;
+  -webkit-appearance: none;
+  transition: border-color 0.2s;
+}
+
+.s3-input:focus, .s3-select:focus {
+  outline: none;
+  border-color: rgba(86,154,49,0.35);
+}
+
+.s3-select option { background: #0b1622; }
+
+/* Storage class row */
+.sc-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.sc-btn {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 5px;
+  padding: 10px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sc-btn:hover { border-color: rgba(86,154,49,0.3); }
+
+.sc-btn.active {
+  border-color: var(--s3);
+  background: var(--s3-dim2);
+}
+
+.scb-name {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+
+.sc-btn.active .scb-name { color: var(--s3); }
+
+.scb-price {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.scb-note {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  display: block;
+}
+
+/* Calc bar */
+.calc-bar {
+  padding: 14px 20px;
+  background: var(--surface2);
+  border-top: 1px solid var(--border2);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-calc {
+  padding: 10px 28px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--s3);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: opacity 0.15s, box-shadow 0.15s;
+  box-shadow: 0 0 18px rgba(86,154,49,0.2);
+}
+
+.btn-calc:hover { opacity: 0.87; box-shadow: 0 0 26px rgba(86,154,49,0.35); }
+
+/* RESULTS */
+#resultsWrap { display: none; }
+
+.results-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.res-card {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.res-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+.rc-s3::before    { background: var(--s3); }
+.rc-blue::before  { background: var(--blue); }
+.rc-aws::before   { background: var(--aws); }
+.rc-purple::before{ background: var(--purple); }
+
+.rc-label { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 8px; }
+.rc-val   { font-family: var(--mono); font-size: 22px; font-weight: 600; line-height: 1; margin-bottom: 3px; }
+.rc-sub   { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
+
+.breakdown {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.bt-head {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border2);
+  padding: 8px 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.bt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border2);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.bt-row:last-child { border-bottom: none; }
+.bt-row:hover { background: rgba(86,154,49,0.02); }
+.bt-key   { color: var(--text-muted); }
+.bt-val   { color: var(--text); }
+.bt-total { color: var(--s3); font-size: 14px; font-weight: 600; }
+
+/* Class comparison */
+.cmp-table {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.cmp-row {
+  display: grid;
+  grid-template-columns: 170px 1fr 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--border2);
+}
+
+.cmp-row:last-child { border-bottom: none; }
+.cmp-row.cmp-head   { background: var(--surface2); }
+.cmp-row.cmp-active { background: var(--s3-dim2); }
+
+.cmp-cell {
+  padding: 9px 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  border-right: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+}
+
+.cmp-cell:last-child { border-right: none; }
+.cmp-head .cmp-cell { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+.cmp-row.cmp-active .cmp-cell { color: var(--s3); }
+
+/* DIVIDER */
+hr.divider { border: none; border-top: 1px solid var(--border2); margin: 50px 0; }
+
+.content-section { margin-bottom: 50px; }
+
+.sec-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.sec-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--s3);
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+.sec-rule { flex: 1; height: 1px; background: var(--border2); }
+
+p { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin-bottom: 10px; }
+p strong { color: var(--text); }
+
+code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--surface2);
+  color: var(--s3);
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--border2);
+}
+
+.dense-block {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 22px;
+  margin-top: 14px;
+}
+
+.dense-block p { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border2); }
+.dense-block p:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+.faq-list {
+  margin-top: 14px;
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.faq-item { border-bottom: 1px solid var(--border2); }
+.faq-item:last-child { border-bottom: none; }
+
+.faq-q {
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: none;
+  padding: 13px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  font-family: var(--sans);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.15s;
+}
+
+.faq-q:hover { background: var(--s3-dim2); }
+.faq-arrow { font-family: var(--mono); font-size: 11px; color: var(--text-dim); transition: transform 0.2s; flex-shrink: 0; }
+.faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+.faq-a {
+  display: none;
+  padding: 0 18px 13px;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.75;
+  border-top: 1px solid var(--border2);
+  background: var(--bg);
+}
+
+.faq-item.open .faq-a { display: block; }
+.faq-a code { font-family: var(--mono); font-size: 11px; color: var(--s3); background: var(--s3-dim2); border-radius: 3px; padding: 1px 5px; }
+
+.other-tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.otl {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  text-decoration: none;
+  display: block;
+  transition: border-color 0.15s;
+}
+
+.otl:hover { border-color: rgba(86,154,49,0.3); }
+.otl-eye  { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+.otl-name { font-family: var(--mono); font-size: 12px; color: var(--s3); font-weight: 500; }
+
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 50px; }
+
+.tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 100px;
+  padding: 4px 12px;
+  cursor: default;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tag:hover { color: var(--s3); border-color: rgba(86,154,49,0.3); }
+
+footer { border-top: 1px solid var(--border2); padding: 20px 0; position: relative; z-index: 1; }
+
+.footer-inner {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+footer p { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin: 0; }
+
+@media (max-width: 700px) {
+  .sc-grid  { grid-template-columns: repeat(3, 1fr); }
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .results-cards { grid-template-columns: 1fr 1fr; }
+  .cmp-row { grid-template-columns: 110px repeat(5, 1fr); font-size: 10px; }
+}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AWS S3 Calculator",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free Amazon S3 pricing calculator. Estimate monthly S3 costs for all storage classes: Standard, Intelligent-Tiering, Standard-IA, One Zone-IA, and Glacier. Includes storage, GET/PUT/LIST requests, data transfer, and replication costs.",
+  "featureList": "S3 Standard cost, S3 Intelligent-Tiering, Standard-IA cost, One Zone-IA, Glacier Instant, storage class comparison, request cost estimator, data transfer cost, replication cost"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does AWS S3 cost per GB?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AWS S3 storage costs (US East, first 50TB): S3 Standard ~$0.023/GB/month. S3 Intelligent-Tiering ~$0.023/GB (frequent) / $0.0125/GB (infrequent). S3 Standard-IA ~$0.0125/GB. S3 One Zone-IA ~$0.01/GB. S3 Glacier Instant ~$0.004/GB. S3 Glacier Flexible ~$0.0036/GB. S3 Glacier Deep Archive ~$0.00099/GB. Request and data transfer costs are additional."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does the AWS S3 calculator include?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The S3 cost calculator covers: (1) Storage cost by class and size. (2) Request costs — PUT, COPY, POST, LIST cost $0.005/1000 requests; GET, SELECT, others cost $0.0004/1000 requests. (3) Data transfer out — first 100GB/month free, then $0.09/GB up to 10TB. (4) S3 Replication — adds storage cost in the destination region plus replication request fees."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the cheapest AWS S3 storage class?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "S3 Glacier Deep Archive at ~$0.00099/GB/month is the cheapest storage class — 23x cheaper than S3 Standard. However it has a 180-day minimum and 12-48 hour retrieval time. For active data with infrequent access, S3 Standard-IA at $0.0125/GB or One Zone-IA at $0.01/GB are the cheapest with fast retrieval."
+      }
+    }
+  ]
+}
+</script>
+
 </head>
+
 <body>
 
-    <h1>AWS S3 Tools</h1>
+<header>
+  <div class="header-inner">
+    <span class="logo-pill">S3</span>
+    <span class="logo-text"><strong>aws-s3</strong>-pricing-calculator</span>
+  </div>
+</header>
 
-    <p>
-        Optimize your AWS S3 storage with advanced tools designed for developers,
-        DevOps engineers, and cloud architects. Estimate costs, analyze storage usage,
-        manage policies, and select the best storage classes for your workloads.
+<div class="wrapper">
+
+  <!-- HERO -->
+
+  <section class="hero">
+    <p class="hero-eyebrow">// Free AWS Storage Tool</p>
+    <h1><em>AWS S3</em> Calculator<br>Amazon S3 Pricing &amp; Cost Estimator</h1>
+    <p class="hero-sub">
+      Estimate monthly <strong>Amazon S3 costs</strong> across all storage classes. Includes storage, GET/PUT requests, data transfer, and replication. Select a storage class and fill in your usage.
     </p>
-
-    <p>
-        These tools help reduce S3 costs, improve data management, and optimize storage
-        performance across your AWS infrastructure. Ideal for data lakes, backups,
-        media storage, and scalable cloud applications.
-    </p>
-
-    <div class="tools">
-
-        <div class="tool">
-            <a href="s3_bucket_policy_generator/">Bucket Policy Generator</a>
-            <small>Create secure AWS S3 bucket policies.</small>
-        </div>
-
-        <div class="tool">
-            <a href="s3_cost_optimizer/">Cost Optimizer</a>
-            <small>Identify opportunities to reduce S3 storage costs.</small>
-        </div>
-
-        <div class="tool">
-            <a href="s3_lifecycle_policy_generator/">Lifecycle Policy Generator</a>
-            <small>Generate lifecycle rules for efficient storage management.</small>
-        </div>
-
-        <div class="tool">
-            <a href="s3_object_size_analyzer/">Object Size Analyzer</a>
-            <small>Analyze S3 object sizes to optimize storage usage.</small>
-        </div>
-
-        <div class="tool">
-            <a href="s3_pricing_calculator/">Pricing Calculator</a>
-            <small>Estimate AWS S3 pricing based on storage and usage.</small>
-        </div>
-
-        <div class="tool">
-            <a href="s3_public_access_checker/">Public Access Checker</a>
-            <small>Check S3 buckets for public access exposure.</small>
-        </div>
-
-        <div class="tool">
-            <a href="s3_request_cost_estimator/">Request Cost Estimator</a>
-            <small>Estimate S3 request costs (GET, PUT, LIST).</small>
-        </div>
-
-        <div class="tool">
-            <a href="s3_storage_class_selector/">Storage Class Selector</a>
-            <small>Select the best S3 storage class for your data.</small>
-        </div>
-
-        <div class="tool">
-            <a href="s3_storage_estimator/">Storage Estimator</a>
-            <small>Estimate total storage requirements and costs.</small>
-        </div>
-
-        <div class="tool">
-            <a href="s3_transfer_cost_calculator/">Transfer Cost Calculator</a>
-            <small>Calculate data transfer costs for AWS S3.</small>
-        </div>
-
+    <div class="pill-row">
+      <span class="pill pill-s3">Standard · IA · Glacier</span>
+      <span class="pill pill-aws">Requests · Transfer</span>
+      <span class="pill pill-dim">Class Comparison</span>
+      <span class="pill pill-dim">Free · No login</span>
     </div>
+  </section>
+
+  <!-- TOOL -->
+
+  <div class="tool-shell">
+    <div class="tool-topbar">
+      <span class="topbar-label">// AWS S3 Cost Calculator</span>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-sm btn-green" onclick="loadSample()">Load Sample</button>
+        <button class="btn-sm btn-ghost" onclick="resetCalc()">Reset</button>
+      </div>
+    </div>
+
+
+<!-- Storage class selector -->
+<div style="padding:16px 20px 0;border-bottom:1px solid var(--border2);padding-bottom:16px;">
+  <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">Storage Class</div>
+  <div class="sc-grid" id="scGrid"></div>
+</div>
+
+<!-- Tabs -->
+<div class="calc-tabs">
+  <button class="ctab active" id="ctab-storage" onclick="switchCtab('storage')">Storage</button>
+  <button class="ctab" id="ctab-requests" onclick="switchCtab('requests')">Requests</button>
+  <button class="ctab" id="ctab-transfer" onclick="switchCtab('transfer')">Data Transfer</button>
+  <button class="ctab" id="ctab-replication" onclick="switchCtab('replication')">Replication</button>
+</div>
+
+<!-- Storage tab -->
+<div class="ctpanel active" id="ctpanel-storage">
+  <div class="form-grid">
+    <div class="field">
+      <label class="field-label">Storage (GB/month)</label>
+      <p class="field-hint">Average data stored</p>
+      <input class="s3-input" type="number" id="storageGB" placeholder="500" min="0">
+    </div>
+    <div class="field">
+      <label class="field-label">Region</label>
+      <p class="field-hint">AWS pricing region</p>
+      <select class="s3-select" id="regionSelect">
+        <option value="use1">US East (N. Virginia)</option>
+        <option value="usw2">US West (Oregon)</option>
+        <option value="euw1">EU West (Ireland)</option>
+        <option value="apse1">AP Southeast (Singapore)</option>
+        <option value="apne1">AP Northeast (Tokyo)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">Monitoring (IT only)</label>
+      <p class="field-hint">Objects (Intelligent-Tiering)</p>
+      <input class="s3-input" type="number" id="itObjects" placeholder="0" min="0">
+    </div>
+  </div>
+</div>
+
+<!-- Requests tab -->
+<div class="ctpanel" id="ctpanel-requests">
+  <div class="form-grid">
+    <div class="field">
+      <label class="field-label">PUT / COPY / POST (thousands)</label>
+      <p class="field-hint">Write requests / month</p>
+      <input class="s3-input" type="number" id="putReqs" placeholder="100" min="0">
+    </div>
+    <div class="field">
+      <label class="field-label">GET / SELECT (thousands)</label>
+      <p class="field-hint">Read requests / month</p>
+      <input class="s3-input" type="number" id="getReqs" placeholder="500" min="0">
+    </div>
+    <div class="field">
+      <label class="field-label">LIST requests (thousands)</label>
+      <p class="field-hint">Bucket list operations</p>
+      <input class="s3-input" type="number" id="listReqs" placeholder="10" min="0">
+    </div>
+  </div>
+</div>
+
+<!-- Transfer tab -->
+<div class="ctpanel" id="ctpanel-transfer">
+  <div class="form-grid">
+    <div class="field">
+      <label class="field-label">Transfer Out to Internet (GB)</label>
+      <p class="field-hint">First 100 GB/month free</p>
+      <input class="s3-input" type="number" id="transferOut" placeholder="200" min="0">
+    </div>
+    <div class="field">
+      <label class="field-label">Transfer to CloudFront (GB)</label>
+      <p class="field-hint">Free via CloudFront</p>
+      <input class="s3-input" type="number" id="transferCF" placeholder="0" min="0">
+    </div>
+    <div class="field">
+      <label class="field-label">Cross-Region Transfer (GB)</label>
+      <p class="field-hint">~$0.02/GB</p>
+      <input class="s3-input" type="number" id="transferCR" placeholder="0" min="0">
+    </div>
+  </div>
+</div>
+
+<!-- Replication tab -->
+<div class="ctpanel" id="ctpanel-replication">
+  <div class="form-grid">
+    <div class="field">
+      <label class="field-label">Replicated Data (GB)</label>
+      <p class="field-hint">Adds dest. region storage cost</p>
+      <input class="s3-input" type="number" id="replGB" placeholder="0" min="0">
+    </div>
+    <div class="field">
+      <label class="field-label">Replication Requests (thousands)</label>
+      <p class="field-hint">PUT reqs in dest. region</p>
+      <input class="s3-input" type="number" id="replReqs" placeholder="0" min="0">
+    </div>
+  </div>
+</div>
+
+<div class="calc-bar">
+  <button class="btn-calc" onclick="calcS3()">Calculate S3 Cost</button>
+  <span style="font-family:var(--mono);font-size:11px;color:var(--text-dim);">Fill tabs above for each component you use</span>
+</div>
+
+
+  </div>
+
+  <!-- RESULTS -->
+
+  <div id="resultsWrap">
+    <div class="results-cards" id="resultsCards"></div>
+    <div class="breakdown" id="breakdownTable"></div>
+    <div class="cmp-table" id="cmpTable"></div>
+  </div>
+
+  <hr class="divider">
+
+  <section class="content-section">
+    <div class="sec-head">
+      <span class="sec-label">S3 Storage Classes</span>
+      <span class="sec-rule"></span>
+    </div>
+    <div class="dense-block">
+      <p><strong>S3 Standard</strong> — $0.023/GB/month<br>
+      Default storage class. 99.99% availability, 11 nines durability, multi-AZ. No minimum storage duration. Best for frequently accessed data, web applications, and content distribution. Retrieval is free — you only pay for storage and requests.</p>
+
+
+  <p><strong>S3 Intelligent-Tiering</strong> — $0.023/GB (frequent) / $0.0125/GB (infrequent)<br>
+  Automatically moves objects between frequent and infrequent access tiers based on usage patterns. Monitoring fee: $0.0025 per 1,000 objects. No retrieval fees. Best for data with unknown or changing access patterns. Objects not accessed for 30 days move to infrequent tier. Deep Archive tier available for objects not accessed 180+ days.</p>
+
+  <p><strong>S3 Standard-IA (Infrequent Access)</strong> — $0.0125/GB/month<br>
+  46% cheaper than Standard for storage, but charges $0.01/GB retrieval fee. 30-day minimum storage duration. Best for backups, disaster recovery files, and data accessed monthly or less. Per-GB retrieval cost makes it expensive for frequently read data.</p>
+
+  <p><strong>S3 One Zone-IA</strong> — $0.01/GB/month<br>
+  Like Standard-IA but stored in a single AZ — 20% cheaper than Standard-IA but less durable (99.5% availability). Best for reproducible secondary copies, thumbnails, and data that can be re-created if the AZ fails. Not suitable for primary backup storage.</p>
+</div>
+
+
+  </section>
+
+  <section class="content-section">
+    <div class="sec-head">
+      <span class="sec-label">FAQ — AWS S3 Pricing</span>
+      <span class="sec-rule"></span>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How much does AWS S3 cost?<span class="faq-arrow">&#9660;</span></button>
+        <div class="faq-a">S3 Standard: ~$0.023/GB/month. First 50TB discounted; above 500TB at $0.021/GB. Plus request costs: PUT/COPY $0.005 per 1,000 requests, GET $0.0004 per 1,000. Data transfer out first 100GB/month free, then $0.09/GB up to 10TB. Most small projects pay under $5/month. The AWS Free Tier includes 5GB Standard, 20,000 GET requests, and 2,000 PUT requests per month for 12 months.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What is the AWS S3 free tier?<span class="faq-arrow">&#9660;</span></button>
+        <div class="faq-a">New AWS accounts get 12 months free: 5 GB of S3 Standard storage, 20,000 GET requests, 2,000 PUT/COPY/POST/LIST requests, and 15 GB of data transfer out per month. After 12 months, standard rates apply. Some services like AWS Lambda have a permanent free tier, but S3 storage free tier expires after 12 months.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What is S3 Intelligent-Tiering and when should I use it?<span class="faq-arrow">&#9660;</span></button>
+        <div class="faq-a">Intelligent-Tiering automatically moves objects between access tiers based on usage. Objects not accessed for 30 days move to Infrequent tier (50% cheaper). Objects not accessed for 90 days can move to Archive Instant tier. No retrieval fees. Monitoring fee: $0.0025 per 1,000 objects. Best for large datasets with unpredictable access. Not cost-effective for objects under 128KB or data accessed frequently.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How do I reduce my S3 bill?<span class="faq-arrow">&#9660;</span></button>
+        <div class="faq-a">Key optimizations: (1) Use lifecycle policies to automatically move infrequently accessed objects to Standard-IA or Glacier. (2) Enable Intelligent-Tiering for large buckets with unpredictable access. (3) Use CloudFront in front of S3 — transfer from S3 to CloudFront is free. (4) Delete incomplete multipart uploads (hidden cost). (5) Compress objects before storing to reduce GB. (6) Use S3 Storage Lens to identify unused buckets and large objects.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What are S3 request costs?<span class="faq-arrow">&#9660;</span></button>
+        <div class="faq-a">PUT, COPY, POST, LIST: $0.005 per 1,000 requests. GET, SELECT, and all other requests: $0.0004 per 1,000 requests. Lifecycle transition requests: $0.01 per 1,000. For Standard-IA and One Zone-IA, GET requests also include a $0.01/GB retrieval fee. High-volume applications with millions of requests pay significant request costs — use caching to minimize GET requests.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="sec-head">
+      <span class="sec-label">More Tools</span>
+      <span class="sec-rule"></span>
+    </div>
+    <div class="other-tools">
+      <a href="s3_bucket_policy_generator/" class="otl"><p class="otl-eye">policy //</p><span class="otl-name">Bucket Policy Generator</span></a>
+      <a href="s3_lifecycle_policy_generator/" class="otl"><p class="otl-eye">lifecycle //</p><span class="otl-name">Lifecycle Policy Generator</span></a>
+      <a href="s3_storage_class_selector/" class="otl"><p class="otl-eye">class //</p><span class="otl-name">Storage Class Selector</span></a>
+      <a href="s3_transfer_cost_calculator/" class="otl"><p class="otl-eye">transfer //</p><span class="otl-name">Transfer Cost Calculator</span></a>
+      <a href="s3_request_cost_estimator/" class="otl"><p class="otl-eye">requests //</p><span class="otl-name">Request Cost Estimator</span></a>
+    </div>
+  </section>
+
+  <div class="tag-cloud">
+    <span class="tag">aws calculator s3</span>
+    <span class="tag">aws s3 calculator</span>
+    <span class="tag">s3 pricing calculator</span>
+    <span class="tag">aws s3 cost calculator</span>
+    <span class="tag">amazon s3 pricing calculator</span>
+    <span class="tag">s3 cost calculator</span>
+    <span class="tag">aws storage calculator</span>
+    <span class="tag">s3 storage cost calculator</span>
+    <span class="tag">s3 intelligent tiering cost</span>
+    <span class="tag">s3 standard ia pricing</span>
+    <span class="tag">s3 request cost estimator</span>
+    <span class="tag">aws s3 transfer cost</span>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>aws-s3-calculator &middot; pricing estimator &middot; free &middot; no login</p>
+    <p>standard &middot; intelligent-tiering &middot; standard-ia &middot; one zone-ia &middot; glacier</p>
+  </div>
+</footer>
+
+<script>
+// ─── PRICING ───
+var CLASSES = [
+  { id: 'standard',    name: 'Standard',      shortName: 'Std',
+    prices: { use1:0.023,  usw2:0.023,  euw1:0.024,  apse1:0.025, apne1:0.025 },
+    retrieval: 0, minDays: 0,  note: 'Most used' },
+  { id: 'it',          name: 'Intelligent-T',  shortName: 'IT',
+    prices: { use1:0.023,  usw2:0.023,  euw1:0.024,  apse1:0.025, apne1:0.025 },
+    retrieval: 0, minDays: 30, note: 'Auto-tier' },
+  { id: 'standard-ia', name: 'Standard-IA',   shortName: 'Std-IA',
+    prices: { use1:0.0125, usw2:0.0125, euw1:0.0135, apse1:0.015, apne1:0.015 },
+    retrieval: 0.01, minDays: 30, note: 'Infrequent' },
+  { id: 'one-zone-ia', name: 'One Zone-IA',   shortName: '1Z-IA',
+    prices: { use1:0.01,   usw2:0.01,   euw1:0.011,  apse1:0.012, apne1:0.012 },
+    retrieval: 0.01, minDays: 30, note: 'Single AZ' },
+  { id: 'glacier-instant', name: 'Glacier Instant', shortName: 'GCI',
+    prices: { use1:0.004,  usw2:0.004,  euw1:0.0044, apse1:0.005, apne1:0.005 },
+    retrieval: 0.03, minDays: 90, note: 'Archive' }
+];
+
+var TRANSFER_PRICES = {
+  use1:  0.09, usw2: 0.09, euw1: 0.09, apse1: 0.09, apne1: 0.114
+};
+
+var PUT_COST_PER_1K  = 0.005;
+var GET_COST_PER_1K  = 0.0004;
+var LIST_COST_PER_1K = 0.005;
+var IT_MONITOR_PER_1K = 0.0025;
+var CROSS_REGION_COST = 0.02;
+var REPL_PUT_COST     = 0.005;
+
+var activeClass = 'standard';
+
+function init() {
+  var grid = document.getElementById('scGrid');
+  CLASSES.forEach(function(sc) {
+    var btn = document.createElement('div');
+    btn.className = 'sc-btn' + (sc.id === activeClass ? ' active' : '');
+    btn.id = 'sc-' + sc.id;
+    btn.onclick = function() { selectClass(sc.id); };
+
+    var name = document.createElement('span');
+    name.className = 'scb-name';
+    name.textContent = sc.name;
+
+    var price = document.createElement('span');
+    price.className = 'scb-price';
+    price.style.color = sc.id === 'standard' ? 'var(--aws)'
+      : sc.id === 'it' ? 'var(--blue)'
+      : sc.id === 'standard-ia' ? 'var(--s3)'
+      : sc.id === 'one-zone-ia' ? 'var(--yellow)'
+      : 'var(--purple)';
+    price.textContent = '$' + sc.prices.use1 + '/GB';
+
+    var note = document.createElement('span');
+    note.className = 'scb-note';
+    note.textContent = sc.note;
+
+    btn.appendChild(name);
+    btn.appendChild(price);
+    btn.appendChild(note);
+    grid.appendChild(btn);
+  });
+}
+
+function selectClass(id) {
+  activeClass = id;
+  document.querySelectorAll('.sc-btn').forEach(function(b) { b.classList.remove('active'); });
+  var btn = document.getElementById('sc-' + id);
+  if (btn) btn.classList.add('active');
+  var itField = document.getElementById('itObjects');
+  if (itField) itField.parentElement.style.opacity = id === 'it' ? '1' : '0.4';
+}
+
+function switchCtab(id) {
+  document.querySelectorAll('.ctab').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.ctpanel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('ctab-' + id).classList.add('active');
+  document.getElementById('ctpanel-' + id).classList.add('active');
+}
+
+function fmtP(n) { return '$' + n.toFixed(2); }
+
+function calcS3() {
+  var storageGB  = parseFloat(document.getElementById('storageGB').value) || 0;
+  var region     = document.getElementById('regionSelect').value;
+  var itObjects  = parseFloat(document.getElementById('itObjects').value) || 0;
+  var putReqs    = parseFloat(document.getElementById('putReqs').value) || 0;
+  var getReqs    = parseFloat(document.getElementById('getReqs').value) || 0;
+  var listReqs   = parseFloat(document.getElementById('listReqs').value) || 0;
+  var transferOut = parseFloat(document.getElementById('transferOut').value) || 0;
+  var transferCR  = parseFloat(document.getElementById('transferCR').value) || 0;
+  var replGB      = parseFloat(document.getElementById('replGB').value) || 0;
+  var replReqs    = parseFloat(document.getElementById('replReqs').value) || 0;
+
+  var sc = CLASSES.find(function(c) { return c.id === activeClass; });
+  var storagePrice = sc.prices[region] || sc.prices.use1;
+  var transferPrice = TRANSFER_PRICES[region] || 0.09;
+
+  // Storage
+  var storageCost = storageGB * storagePrice;
+
+  // IT monitoring
+  var itMonitor = activeClass === 'it' ? (itObjects / 1000) * IT_MONITOR_PER_1K : 0;
+
+  // Requests
+  var putCost  = putReqs  * PUT_COST_PER_1K;
+  var getCost  = getReqs  * GET_COST_PER_1K;
+  var listCost = listReqs * LIST_COST_PER_1K;
+  var reqCost  = putCost + getCost + listCost;
+
+  // Transfer
+  var freeTransfer = 100;
+  var billableTransfer = Math.max(0, transferOut - freeTransfer);
+  var transferCost = billableTransfer * transferPrice;
+  var crossRegionCost = transferCR * CROSS_REGION_COST;
+
+  // Replication
+  var replStorageCost = replGB * storagePrice;
+  var replReqCost = replReqs * REPL_PUT_COST;
+  var replCost = replStorageCost + replReqCost;
+
+  var total = storageCost + itMonitor + reqCost + transferCost + crossRegionCost + replCost;
+  var annual = total * 12;
+
+  // Result cards
+  var cards = document.getElementById('resultsCards');
+  cards.innerHTML = '';
+
+  function makeCard(cls, label, val, sub) {
+    var c = document.createElement('div'); c.className = 'res-card rc-' + cls;
+    var l = document.createElement('div'); l.className = 'rc-label'; l.textContent = label;
+    var v = document.createElement('div'); v.className = 'rc-val';
+    var colors = { s3: 'var(--s3)', blue: 'var(--blue)', aws: 'var(--aws)', purple: 'var(--purple)' };
+    v.style.color = colors[cls] || 'var(--text)';
+    v.textContent = val;
+    var s = document.createElement('div'); s.className = 'rc-sub'; s.textContent = sub;
+    c.appendChild(l); c.appendChild(v); c.appendChild(s);
+    return c;
+  }
+
+  cards.appendChild(makeCard('s3',     'Monthly Total',    fmtP(total),       sc.name + ' · ' + region.toUpperCase()));
+  cards.appendChild(makeCard('blue',   'Annual Estimate',  fmtP(annual),      'x12 months'));
+  cards.appendChild(makeCard('aws',    'Storage Cost',     fmtP(storageCost), storageGB + ' GB × $' + storagePrice + '/GB'));
+  cards.appendChild(makeCard('purple', 'Requests + Transfer', fmtP(reqCost + transferCost + crossRegionCost), 'requests and data transfer'));
+
+  // Breakdown
+  var bt = document.getElementById('breakdownTable');
+  bt.innerHTML = '';
+  var bHead = document.createElement('div'); bHead.className = 'bt-head'; bHead.textContent = 'Cost Breakdown';
+  bt.appendChild(bHead);
+
+  function bRow(key, val, bold) {
+    var row = document.createElement('div'); row.className = 'bt-row';
+    var k = document.createElement('span'); k.className = 'bt-key'; k.textContent = key;
+    var v = document.createElement('span'); v.className = bold ? 'bt-total' : 'bt-val'; v.textContent = val;
+    row.appendChild(k); row.appendChild(v); bt.appendChild(row);
+  }
+
+  bRow('Storage (' + storageGB + ' GB × $' + storagePrice + '/GB)', fmtP(storageCost));
+  if (itMonitor > 0) bRow('Intelligent-Tiering monitoring (' + itObjects + 'K objects)', fmtP(itMonitor));
+  if (putCost > 0)   bRow('PUT/COPY/POST requests (' + putReqs + 'K)', fmtP(putCost));
+  if (getCost > 0)   bRow('GET/SELECT requests (' + getReqs + 'K)', fmtP(getCost));
+  if (listCost > 0)  bRow('LIST requests (' + listReqs + 'K)', fmtP(listCost));
+  if (transferCost > 0)   bRow('Data transfer out (' + billableTransfer + ' GB charged)', fmtP(transferCost));
+  if (crossRegionCost > 0) bRow('Cross-region transfer (' + transferCR + ' GB)', fmtP(crossRegionCost));
+  if (replCost > 0)  bRow('Replication (' + replGB + ' GB + ' + replReqs + 'K requests)', fmtP(replCost));
+  bRow('Monthly total', fmtP(total), true);
+  bRow('Annual total', fmtP(annual));
+
+  // Comparison table
+  var cmp = document.getElementById('cmpTable');
+  cmp.innerHTML = '';
+  var hRow = document.createElement('div'); hRow.className = 'cmp-row cmp-head';
+  ['Class', 'Price/GB', 'Min. Days', 'Retrieval fee', 'Est. Storage', 'Best for'].forEach(function(h) {
+    var c = document.createElement('div'); c.className = 'cmp-cell'; c.textContent = h; hRow.appendChild(c);
+  });
+  cmp.appendChild(hRow);
+
+  var bestFor = {
+    'standard':       'Active / frequent',
+    'it':             'Unknown patterns',
+    'standard-ia':    'Monthly backups',
+    'one-zone-ia':    'Reproducible data',
+    'glacier-instant':'Archive, fast ret.'
+  };
+
+  CLASSES.forEach(function(cls) {
+    var cp = cls.prices[region] || cls.prices.use1;
+    var estCost = storageGB * cp;
+    var row = document.createElement('div');
+    row.className = 'cmp-row' + (cls.id === activeClass ? ' cmp-active' : '');
+    [cls.name, '$' + cp + '/GB', cls.minDays ? cls.minDays + ' days' : 'None',
+     cls.retrieval ? '$' + cls.retrieval + '/GB' : 'Free',
+     fmtP(estCost), bestFor[cls.id] || '-'].forEach(function(v) {
+      var c = document.createElement('div'); c.className = 'cmp-cell'; c.textContent = v; row.appendChild(c);
+    });
+    cmp.appendChild(row);
+  });
+
+  document.getElementById('resultsWrap').style.display = 'block';
+  document.getElementById('resultsWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function loadSample() {
+  selectClass('standard');
+  document.getElementById('storageGB').value = '500';
+  document.getElementById('regionSelect').value = 'use1';
+  document.getElementById('putReqs').value = '200';
+  document.getElementById('getReqs').value = '1000';
+  document.getElementById('listReqs').value = '20';
+  document.getElementById('transferOut').value = '150';
+  document.getElementById('transferCR').value = '0';
+  document.getElementById('replGB').value = '0';
+  document.getElementById('replReqs').value = '0';
+  setTimeout(calcS3, 50);
+}
+
+function resetCalc() {
+  ['storageGB','itObjects','putReqs','getReqs','listReqs','transferOut','transferCF','transferCR','replGB','replReqs'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('resultsWrap').style.display = 'none';
+}
+
+function toggleFaq(btn) {
+  btn.parentElement.classList.toggle('open');
+}
+
+init();
+</script>
 
 </body>
 </html>
